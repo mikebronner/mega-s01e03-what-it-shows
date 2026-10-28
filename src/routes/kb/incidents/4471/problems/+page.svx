@@ -1,0 +1,49 @@
+---
+layout: runbook
+title: '#4471 · three problems, not one'
+owner: mikebronner
+status: open
+reviewed: 2026-10-28
+signature: mikebronner
+---
+
+<script>
+  import ProblemTable from '#lib/kb/ProblemTable.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+[#4471](/kb/incidents/4471) is marked known: one parser bug, one fix queued. The reports in it
+show three problems. The queued parser fix closes only the first one.
+
+<Callout kind="warn">
+Do not close #4471 when the parser fix ships. Each problem below has its own ticket.
+</Callout>
+
+## The reports, by problem
+
+<ProblemTable
+  ticket={4471}
+  issues={{
+    parser: 'https://github.com/mikebronner/mega-s01e03-what-it-shows/issues/1',
+    hint: 'https://github.com/mikebronner/mega-s01e03-what-it-shows/issues/2',
+    'one-day move': 'https://github.com/mikebronner/mega-s01e03-what-it-shows/issues/3',
+  }}
+/>
+
+## How each report is placed
+
+1. Count each report id once. The export pages overlap, so some reports come twice.
+2. A report the desk read as a one-day move (`desk-notes.json`) is a one-day move. Its body shows a
+   date one day off, or two attendees on two different days. It is not a swap.
+3. Every other report goes by its tenant, as `causes.ts` reads it: a day-first tenant on the
+   booking-v3 form is `hint`, and the rest are `parser`.
+
+The intake tag is a guess from the reporter's browser. It does not decide the problem.
+
+## Lessons
+
+- Read what the reports show before you merge them. A swap and a one-day move are two bugs.
+- One fix per ticket. If a fix cannot close every report in a ticket, split the ticket.
+
+<RenderStamp {signature} />
