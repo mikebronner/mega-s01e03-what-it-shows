@@ -9,6 +9,7 @@ export type ProblemGroup = {
   firstSeen: string;
   lastSeen: string;
   tagged: Record<string, number>;
+  filedUnder: Problem[];
 };
 
 export const PROBLEMS: Record<Problem, { shows: string; fix: string }> = {
@@ -30,9 +31,21 @@ export const PROBLEMS: Record<Problem, { shows: string; fix: string }> = {
   },
 };
 
-export function problemOf(r: Report, t: Tenant | undefined, oneDayMove: readonly string[]): Problem {
-  if (oneDayMove.includes(r.id)) return 'one-day move';
-  return causeOf(r, t) ?? 'unplaced';
+export function mergedInto(reports: Report[], ticket: number): Report[] {
+  return uniqueById(reports).filter((r) => r.mergedInto === ticket);
+}
+
+function group(problem: Problem, rs: Report[], filedUnder: Problem[] = []): ProblemGroup {
+  const days = rs.map((r) => r.receivedAt.slice(0, 10)).sort();
+  return {
+    problem,
+    reports: rs,
+    tenants: new Set(rs.map((r) => r.tenant)).size,
+    firstSeen: days[0],
+    lastSeen: days[days.length - 1],
+    tagged: rs.reduce<Record<string, number>>((n, r) => ({ ...n, [r.meta.intakeTag]: (n[r.meta.intakeTag] ?? 0) + 1 }), {}),
+    filedUnder,
+  };
 }
 
 export function groupByProblem(
@@ -41,22 +54,17 @@ export function groupByProblem(
   tenantOf: (r: Report) => Tenant | undefined,
   oneDayMove: readonly string[],
 ): ProblemGroup[] {
-  const byProblem = new Map<Problem, Report[]>();
-  for (const r of uniqueById(reports).filter((x) => x.mergedInto === ticket)) {
-    const p = problemOf(r, tenantOf(r), oneDayMove);
-    byProblem.set(p, [...(byProblem.get(p) ?? []), r]);
+  const merged = mergedInto(reports, ticket);
+  const byCause = new Map<Problem, Report[]>();
+  for (const r of merged) {
+    const c = causeOf(r, tenantOf(r)) ?? 'unplaced';
+    byCause.set(c, [...(byCause.get(c) ?? []), r]);
   }
-  return [...byProblem.entries()]
-    .map(([problem, rs]) => {
-      const days = rs.map((r) => r.receivedAt.slice(0, 10)).sort();
-      return {
-        problem,
-        reports: rs,
-        tenants: new Set(rs.map((r) => r.tenant)).size,
-        firstSeen: days[0],
-        lastSeen: days[days.length - 1],
-        tagged: rs.reduce<Record<string, number>>((n, r) => ({ ...n, [r.meta.intakeTag]: (n[r.meta.intakeTag] ?? 0) + 1 }), {}),
-      };
-    })
-    .sort((a, b) => b.reports.length - a.reports.length);
+  const groups = [...byCause.entries()].map(([c, rs]) => group(c, rs)).sort((a, b) => b.reports.length - a.reports.length);
+  const moved = merged.filter((r) => oneDayMove.includes(r.id));
+  if (moved.length) {
+    const under = [...new Set(moved.map((r) => causeOf(r, tenantOf(r)) ?? 'unplaced'))];
+    groups.push(group('one-day move', moved, under));
+  }
+  return groups;
 }

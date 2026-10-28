@@ -34,10 +34,11 @@ Do not close #4471 when the parser fix ships. Each problem below has its own tic
 ## How each report is placed
 
 1. Count each report id once. The export pages overlap, so some reports come twice.
-2. A report the desk read as a one-day move (`desk-notes.json`) is a one-day move. Its body shows a
-   date one day off, or two attendees on two different days. It is not a swap.
-3. Every other report goes by its tenant, as `causes.ts` reads it: a day-first tenant on the
-   booking-v3 form is `hint`, and the rest are `parser`.
+2. Every report goes by its tenant, as `causes.ts` reads it: a day-first tenant on the booking-v3
+   form is `hint`, and the rest are `parser`. These are the desk's own counts.
+3. A report the desk read as a one-day move (`desk-notes.json`) stays counted where the desk files
+   it, and also gets the one-day move ticket. Its body shows a date one day off, or two attendees on
+   two different days. It is not a swap, so the parser fix does not close it.
 
 The intake tag is a guess from the reporter's browser. It does not decide the problem.
 
