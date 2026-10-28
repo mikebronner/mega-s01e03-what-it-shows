@@ -13,11 +13,12 @@ signature: mikebronner
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
 </script>
 
-[#4471](/kb/incidents/4471) is marked known: one parser bug, one fix queued. The reports in it
-show three problems. The queued parser fix closes only the first one.
+[#4471](/kb/incidents/4471) was marked known: one parser bug, one fix queued. The reports in it
+show three problems. Engineering closed #4471 on 5 October: the parser is fixed, and the booking-v3
+form is retired. That closes two of the three.
 
 <Callout kind="warn">
-Do not close #4471 when the parser fix ships. Each problem below has its own ticket.
+The one-day moves are still open. Neither the parser fix nor the retired form touches them.
 </Callout>
 
 ## The reports, by problem

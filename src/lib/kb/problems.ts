@@ -12,22 +12,26 @@ export type ProblemGroup = {
   filedUnder: Problem[];
 };
 
-export const PROBLEMS: Record<Problem, { shows: string; fix: string }> = {
+export const PROBLEMS: Record<Problem, { shows: string; fix: string; state: string }> = {
   parser: {
     shows: 'Day and month swapped: 7 April arrives as 4 July.',
     fix: 'Make the shared parser read dates in the tenant locale. This is the fix queued under #4471.',
+    state: 'fixed 2026-10-05: parse dd/mm for eu locales',
   },
   hint: {
     shows: 'Day and month swapped, but only for bookings made through the booking-v3 form.',
     fix: 'booking-v3 prints MM/DD/YYYY under a field it reads day first. Change the hint to the tenant order.',
+    state: "won't fix: booking-v3 form retired",
   },
   'one-day move': {
     shows: 'The date moves by one day, or two attendees see different days. No swap.',
     fix: 'Not the parser. Look at time zones when the invite is built.',
+    state: 'open: no fix yet',
   },
   unplaced: {
     shows: 'No tenant on file, so no cause can be read.',
     fix: 'Find the tenant first.',
+    state: 'open',
   },
 };
 

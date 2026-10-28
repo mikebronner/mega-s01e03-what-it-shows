@@ -24,7 +24,7 @@
 
 <table>
   <thead>
-    <tr><th>problem</th><th>reports</th><th>what the reports show</th><th>tenants</th><th>seen</th><th>intake tagged</th><th>ticket</th></tr>
+    <tr><th>problem</th><th>reports</th><th>what the reports show</th><th>tenants</th><th>seen</th><th>intake tagged</th><th>ticket</th><th>state</th></tr>
   </thead>
   <tbody>
     {#each groups as g (g.problem)}
@@ -39,6 +39,7 @@
         <td>{g.firstSeen} → {g.lastSeen}</td>
         <td class="tags">{tags(g.tagged)}</td>
         <td>{#if issues[g.problem]}<a href={issues[g.problem]}>{issues[g.problem]?.replace(/^.*\/issues\//, 'issue ')}</a>{:else}none{/if}</td>
+        <td class:open={PROBLEMS[g.problem].state.startsWith('open')}>{PROBLEMS[g.problem].state}</td>
       </tr>
     {/each}
   </tbody>
@@ -54,4 +55,5 @@
 <style>
   .sum { font-size: 1.1rem; }
   .tags { color: var(--muted); font-size: 0.85em; }
+  .open { color: var(--warn); font-weight: 600; }
 </style>
