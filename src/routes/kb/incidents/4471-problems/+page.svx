@@ -4,7 +4,7 @@ title: '#4471 · three problems, not one'
 owner: mikebronner
 status: open
 reviewed: 2026-10-28
-signature: mikebronner
+signature: v1.eyJzdWIiOiI0NzEiLCJhdWQiOiJjaGFsbGVuZ2U6d2hhdC1pdC1zaG93cyIsImlhdCI6MTc5MzIwMDMzMiwiZXhwIjoxNzkzMjg2NzMyfQ.iamX2-0nARjPo3m5RS_KYZsXar90en4JnEhCqsHz4Po
 ---
 
 <script>
