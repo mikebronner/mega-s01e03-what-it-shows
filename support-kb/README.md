@@ -38,5 +38,7 @@ Exported 2026-10-04 from the `support` repo, `apps/kb/` → `src/`.
 ## #4471, split (MEGA.dev S01E03)
 
 - The page: `src/routes/kb/incidents/4471/problems/+page.svx`, with its logic in `src/lib/kb/problems.ts` and `src/lib/kb/ProblemTable.svelte`.
-- The page as the desk sees it: `rendered/kb/incidents/4471/problems/index.html` (the static build, `npm install && npm run build`).
+- The page as the desk sees it: `src/routes/kb/incidents/4471/problems/page.png`, and the static build at `rendered/kb/incidents/4471/problems/index.html` (`npm install && npm run build`).
+
+![The page as the desk sees it](src/routes/kb/incidents/4471/problems/page.png)
 - One issue per problem: #1 parser (374 reports), #2 booking-v3 form hint (33), #3 one-day move (5).
